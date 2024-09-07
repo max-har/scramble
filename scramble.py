@@ -5,7 +5,12 @@
 
 import random
 
-from nltk import tokenize
+import nltk
+#nltk.download('punkt_tab')
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
 
 # This script takes a text as input, scrambles the letters between the first and the last letter of each word in the text and outputs the modified text.
 
@@ -31,16 +36,16 @@ def shuffle(letter_list):
 input_text = '''Melbourne’s magic coffee, a distinctive blend of double ristretto, steamed milk, and microfoam, epitomizes the city’s world-renowned coffee culture. Served in smaller cups to highlight its rich flavors, this beverage showcases Melbourne's barista expertise and commitment to quality, with beans sourced from sustainable farms. The city’s coffee shops offer a tranquil escape with stylish interiors, enhancing the overall experience. Magic coffee has become a symbol of Melbourne's dedication to excellence and community, attracting coffee enthusiasts globally. Experiencing this unique brew is essential for anyone visiting Melbourne, reflecting the city’s passion and innovation in coffee making.'''
 
 # split input into list of words
-sent_list = tokenize.sent_tokenize(input_text)
+sent_list = nltk.tokenize.sent_tokenize(input_text)
 sent_list = [hyphenated_word.replace("-", " - ") for hyphenated_word in sent_list]
-tok_sents_list = [tokenize.word_tokenize(sent) for sent in sent_list]
+tok_sents_list = [nltk.tokenize.word_tokenize(sent) for sent in sent_list]
 
 sents_list = []
 for this_tok_sent_list in tok_sents_list:
     this_letter_sent_list = [[*my_str] for my_str in this_tok_sent_list]
     shuffled_lists = [shuffle(letter_list) for letter_list in this_letter_sent_list]
     shuffled_words_list = [''.join(shuffled_list) for shuffled_list in shuffled_lists]
-    this_sent = tokenize.treebank.TreebankWordDetokenizer().detokenize(shuffled_words_list)
+    this_sent = nltk.tokenize.treebank.TreebankWordDetokenizer().detokenize(shuffled_words_list)
     
     sents_list.append(this_sent)
     output_text = ' '.join(sents_list)
